@@ -1,0 +1,68 @@
+
+<main id="courseMain">
+    <div class="container">
+      
+      <div id="title" class="d-flex align-items-center mt-5 mb-3" style="height:50px;">
+        <button class="btn btn-primary mr-3" routerLink="/courses"><i class="fas fa-chevron-left"></i></button>
+        <h3 class="mb-0">{{course.code}} - {{course.name}}</h3>
+      </div>
+
+      <p class="lead">Sessions</p>
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let s of sessions">
+          <div class="card rounded-0 shadow-light">
+            <div class="card-header">
+              {{s.date | date }}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title p-0 m-0">Session {{s.sessionId}} - {{s.date | date}}</h5>
+              <p class="text-muted mb-2">{{ s.sessionStart | date:'shortTime' }} - {{ s.sessionEnd | date:'shortTime' }}</p>
+
+              <!-- !!!!! -->
+              <p *ngIf="isInstructor()" class="h5 py-0 my-0"><strong>{{s.attended}}/{{s.attended*5}}</strong> people attended</p>
+              <p *ngIf="isStudent()" class="h5 py-0 my-0">You <strong>attended</strong></p>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="exportModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Export</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>TODO</p>
+            <p>ADD OPTIONS</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-warning">Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light text-center position-fixed fixed-bottom shadow">
+  <div class="container d-flex justify-content-end">
+
+    <!-- !!!!! -->
+    <button *ngIf="isInstructor()" class="btn btn-info mx-2" (click)="onNewSession()"><i class="far fa-calendar-plus mr-1"></i> New Session</button>
+    <button *ngIf="isInstructor()" class="btn btn-warning mx-2" data-toggle="modal" data-target="#exportModal"><i class="fas fa-download mr-1"></i>Export</button>
+    <div class="input-group" *ngIf="isStudent()" style="max-width: 400px;">
+      <input type="text" name="" id="" placeholder="Enter session code" class="form-control">
+      <div class="input-group-append">
+        <button class="btn btn-info">Check in</button>
+      </div>
+    </div>
+
+  </div>
+</footer>

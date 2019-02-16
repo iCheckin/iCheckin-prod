@@ -1,0 +1,92 @@
+
+<main>
+
+  <div class="modal fade" id="modalNewCourse" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalNewCourseCenterTitle">New Course</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <form>
+            <div class="form-group">
+              <label for="codeInput">Course Code</label>
+              <input type="text" class="form-control" id="codeInput" placeholder="ex. INF 115">
+            </div>
+            <div class="form-group">
+              <label for="nameInput">Course name</label>
+              <input type="text" class="form-control" id="nameInput" placeholder="ex. Intro to project mgmt">
+            </div>
+            <div class="form-group">
+              <label for="idInput">Course Id</label>
+              <input type="text" class="form-control" id="idInput" placeholder="ex. 30142">
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalAddCourse" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAddCourseCenterTitle">Add Course</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <form>
+            <div class="form-group">
+              <label for="codeInput">Course Code</label>
+              <input type="text" class="form-control" id="codeInput" placeholder="ex. ABCD1424">
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container h-100">
+    <h3 class="mt-5 mb-3">Your Courses</h3>
+    <p class="lead">Current Courses</p>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let c of courses">
+        <div class="card rounded-0 shadow-light" style="height:220px;" (click)="cardOnClick()">
+          <div class="card-header bg-danger rounded-0" style="height: 125px;"></div>
+          <div class="card-body">
+            <h5 class="card-title p-0 m-0">{{c.code}}</h5>
+            <p class="card-text p-0 m-0">{{c.name}} ({{c.courseCode}})</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light text-center position-fixed fixed-bottom">
+  <div class="container d-flex justify-content-end">
+
+    <button *ngIf="isInstructor()" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#modalNewCourse"><i class="fas fa-plus mr-1"></i> New Course</button>
+    <button *ngIf="!isInstructor()" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#modalAddCourse"><i class="fas fa-plus mr-1"></i> Add Course</button>
+    
+    <button type="button" (click)="logout()" class="btn btn-danger mx-2"><i class="fas fa-sign-out-alt mr-1"></i>Log out</button>
+  </div>
+</footer>
+

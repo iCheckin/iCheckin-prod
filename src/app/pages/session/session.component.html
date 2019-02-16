@@ -1,0 +1,97 @@
+
+<main id="courseMain mb-sm-5">
+    <div class="container">
+
+      <div id="title" class="d-flex align-items-center mt-5 mb-5" style="height:50px;">
+        <button class="btn btn-danger mr-3" (click)="onCancel()"><i class="fas fa-chevron-left"></i></button>
+        <h3 class="mb-0">{{course.code}} {{course.name}} - {{ currentDate | date }}</h3>
+      </div>
+
+      <div class="row mx-2 mx-md-0" style="height:60vh;" *ngIf="!started">
+        <div class="col-12 col-md-8 d-flex align-items-center justify-content-center border">
+          <p class="h1">Waiting for start...</p>
+        </div>
+        <div class="col-12 col-md-4 d-flex align-items-center justify-content-center border py-0 px-0">
+
+          <div class="row mx-0 px-1">
+            <div class="col-12 col-lg-6 pr-lg-1 mb-2 mb-lg-0 input-group mx-0 px-0">
+              <input type="text" name="" id="" class="form-control" [(ngModel)]="timerMinute" placeholder="ex. 2">
+              <div class="input-group-append">
+                <span class="input-group-text">minutes</span>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6 pl-lg-1 input-group mx-0 px-0">
+              <input type="text" name="" id=" " class="form-control" [(ngModel)]="timerSecond" placeholder="ex. 30">
+              <div class="input-group-append">
+                <span class="input-group-text">seconds</span>
+              </div>
+            </div>
+            <button class="btn btn-info col-12 mt-2" (click)="onStartSession()"><i class="far fa-calendar-plus mr-1"></i> Start Session</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- QR CODE SECTION -->
+      <div class="row mx-2 mx-md-0" style="height:60vh;" *ngIf="started">
+
+        <div class="col-12 col-md-8 border py-0 d-flex flex-column">
+          <p class="h4 text-center my-3">Scan QR Code or Use Code Below</p>
+          <div class="row" style="height:100%;">
+            <div class="col-12 col-md-6 border d-flex aligh-items-center justify-content-center py-4">
+              <qrcode [qrdata]="'https://www.google.com/'" [size]="256" [usesvg]="true" [level]="'M'"></qrcode>
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center justify-content-center border py-4">
+              <div class="border-0 bg-info rounded-pill"><p id="sessionCode" class="h4 my-2 mx-4 text-white"> A B C D E F G</p></div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-12 col-md-4 d-flex align-items-center justify-content-center border">
+          <div class="row d-flex align-items-center justify-content-center">
+            <p class="col-12 h2 text-center">123 / 350</p>
+            <p class="lead">Checked In</p>
+            <p class="col-12 h5 text-center">Time Remaining: 01:01</p>
+          </div>
+        </div>
+      </div>
+
+      <button *ngIf="started" class="btn btn-info btn-lg btn-block my-2 mt-5 mt-md-2" (click)="onToggleTable()">Toggle Table</button>
+
+      <table *ngIf="showTable" class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Method</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let l of logs; let i=index">
+            <th>{{ i }}</th>
+            <td>{{ l.name }}</td>
+            <td>{{ l.method }}</td>
+            <td>{{ l.timestamp }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light text-center position-fixed fixed-bottom">
+  <div class="container d-flex justify-content-end">
+    <button class="btn btn-info mx-2" *ngIf="!started" (click)="onStartSession()"><i class="far fa-calendar-plus mr-1"></i> Start Session</button>
+    
+    <button class="btn btn-info mx-2" *ngIf="started && !paused" (click)="onPause()"><i class="far fa-pause-circle mr-1"></i> Pause Timer</button>
+    <button class="btn btn-info mx-2" *ngIf="started && paused" (click)="onPause()"><i class="far fa-play-circle mr-1"></i> Resume Timer</button>
+
+    <button class="btn btn-primary mx-2" *ngIf="started" (click)="onComplete()"><i class="far fa-check-circle mr-1"></i> Complete Session</button>
+
+    <button class="btn btn-danger mx-2" (click)="onCancel()"><i class="fas fa-ban mr-1"></i>Cancel</button>
+    <!-- <a routerLink="/course" class="btn btn-danger mx-2">Cancel</a> -->
+  </div>
+</footer>
