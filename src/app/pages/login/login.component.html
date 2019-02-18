@@ -5,17 +5,17 @@
       <p>Login form</p>
     </div>
     <div class="form-label-group">
-      <input type="email" id="inputEmail" placeholder="Email address" required autofocus class="form-control">
+      <input type="email" name="inputEmail" placeholder="Email address" required autofocus class="form-control" [(ngModel)]="usrEmail">
       <label for="inputEmail">Email address</label>
     </div>
     <div class="form-label-group">
-      <input type="password" id="inputPassword" placeholder="Password" required class="form-control">
+      <input type="password" name="inputPassword" placeholder="Password" required class="form-control" [(ngModel)]="usrPassword">
       <label for="inputPassword">Password</label>
     </div>
     <div class="form-label-group text-right">
       <a href="" class="mt-5 mb-3">Forgot password?</a>
     </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="login()">Sign in</button>
     <p class="mt-5 mb-3 text-muted text-center">© 2019-2019</p>
   </form>
 </div>

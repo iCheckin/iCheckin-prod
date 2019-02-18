@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NotifyService } from './core/notify.service';
+import { GeohashService } from './core/geohash.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'iCheckin-prod';
+
+  constructor(private notify:NotifyService){
+  }
+  dismiss(){
+    this.notify.clear();
+  }
+
 }

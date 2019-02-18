@@ -8,14 +8,17 @@ import { CoursesComponent } from './pages/courses/courses.component';
 import { CourseComponent } from './pages/course/course.component';
 import { SessionComponent } from './pages/session/session.component';
 
+import { AuthGuard } from '../app/core/auth.guard';
+
 const routes: Routes = [
   { path:"", component: HomeComponent},
   { path:"login", component: LoginComponent},
   { path:"signup", component: SignupComponent},
   { path:"about", component: AboutComponent},
-  { path:"courses", component: CoursesComponent},
-  { path:"course", component:CourseComponent},
-  { path:"session", component:SessionComponent}
+  { path:"courses", component: CoursesComponent, canActivate: [AuthGuard]},
+  { path:"course/:id", component:CourseComponent, canActivate: [AuthGuard]},
+  { path:"session/:id", component:SessionComponent, canActivate: [AuthGuard]},
+  { path: '**', redirectTo:'/'}
 ];
 
 @NgModule({

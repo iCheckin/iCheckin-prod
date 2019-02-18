@@ -13,8 +13,11 @@
           <a href="/about" class="nav-link">About</a>
         </li>
       </ul>
-      <button class="btn btn-link" routerLink="/login">Login</button>
-      <button class="btn btn-outline-primary" routerLink="/signup">Sign up</button>
+      <!-- <button class="btn btn-link" routerLink="/login">Login</button>
+      <button class="btn btn-outline-primary" routerLink="/signup">Sign up</button> -->
+      <button *ngIf="!val1" class="btn btn-link" routerLink="/login">Login</button>
+      <button *ngIf="!val1" class="btn btn-outline-primary" routerLink="/signup">Sign up</button>
+      <button *ngIf="val1" class="btn btn-outline-primary" routerLink="/courses">View my courses</button>
     </div>
   </div>
 </nav>

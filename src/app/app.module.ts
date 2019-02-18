@@ -27,7 +27,7 @@ import { SessionComponent } from './pages/session/session.component';
     AboutComponent,
     CoursesComponent,
     CourseComponent,
-    SessionComponent
+    SessionComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,18 +1,91 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+
+import { Observable, EMPTY } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
+// import 'rxjs/add/operator/switchMap';
+
+import { User } from "../models/user";
+import { NotifyService } from './notify.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
+  user: Observable<User>;
 
-  getRole(){
-    // return "student";
-    return "instructor";
+  constructor(
+    private afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    private router: Router,
+    private notify: NotifyService) {
+
+      this.user = this.afAuth.authState.pipe(
+        switchMap(user => {
+          if (user) {
+            // logged in, get custom user from Firestore
+            return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
+          } else {
+            // logged out, null
+            return EMPTY;
+          }
+        })
+      )
   }
 
-  isInstructor(){
-    return this.getRole()=="instructor";
+  isLoggedIn(){
+    var user = this.afAuth.auth.currentUser;
+    if(user){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getUser(){
+    return this.user;
+  }
+
+  signOut(){
+    this.afAuth.auth.signOut();
+  }
+
+  emailSignIn(email:string, password: string){
+    this.afAuth.auth.signInWithEmailAndPassword(email, password).catch(error => {
+      this.notify.update(error, 'error');
+    })
+  }
+
+  emailSignUp(email: string, password: string, role: string){
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+      .then(
+        result => {
+          // return this.setUserDoc(user, role)
+          this.setUserDoc(result.user,role);
+          return true;
+        }
+      )
+      .catch(error => {
+        this.notify.update(error, 'error');
+        return false;
+      });
+
+
+  }
+
+  setUserDoc(user, r){
+    const userRef = this.afs.doc(`users/${user.uid}`);
+
+    const data = {
+      uid: user.uid,
+      email: user.email,
+      role: r
+    }
+
+    return userRef.set(data);
   }
 }

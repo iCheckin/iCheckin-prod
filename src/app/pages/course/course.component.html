@@ -3,26 +3,29 @@
     <div class="container">
       
       <div id="title" class="d-flex align-items-center mt-5 mb-3" style="height:50px;">
-        <button class="btn btn-primary mr-3" routerLink="/courses"><i class="fas fa-chevron-left"></i></button>
-        <h3 class="mb-0">{{course.code}} - {{course.name}}</h3>
+        <button class="btn btn-primary mr-3" (click)="onBack()"><i class="fas fa-chevron-left"></i></button>
+        <h3 class="mb-0" *ngIf="course">{{course.courseCode}} - {{course.courseName}}</h3>
       </div>
 
       <p class="lead">Sessions</p>
       <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let s of sessions">
+        <div class="col-12 col-md-6 col-lg-4" *ngIf="!sessions || sessions.length == 0">
+          No session available
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let s of sessions; let i = index">
           <div class="card rounded-0 shadow-light">
             <div class="card-header">
-              {{s.date | date }}
+              {{s.createdAt.toDate() | date }}
             </div>
             <div class="card-body">
-              <h5 class="card-title p-0 m-0">Session {{s.sessionId}} - {{s.date | date}}</h5>
-              <p class="text-muted mb-2">{{ s.sessionStart | date:'shortTime' }} - {{ s.sessionEnd | date:'shortTime' }}</p>
+              <h5 class="card-title p-0 m-0">Session {{i + 1}} - {{s.createdAt.toDate() | date}}</h5>
+              <p class="text-muted mb-2">{{ s.startedAt.toDate() | date:'shortTime' }} - {{ s.endedAt.toDate() | date:'shortTime' }}</p>
 
               <!-- !!!!! -->
-              <p *ngIf="isInstructor()" class="h5 py-0 my-0"><strong>{{s.attended}}/{{s.attended*5}}</strong> people attended</p>
-              <p *ngIf="isStudent()" class="h5 py-0 my-0">You <strong>attended</strong></p>
-
-
+              <p *ngIf="user && user.isInstructor()" class="h5 py-0 my-0"><strong>{{s.count}}/{{enrollmentCount}}</strong> people attended</p>
+              <p *ngIf="user && !user.isInstructor() && s.attended!=null && s.attended" class="h5 py-0 my-0">You <strong>attended</strong></p>
+              <p *ngIf="user && !user.isInstructor() && s.attended!=null && !s.attended" class="h5 py-0 my-0">You <strong class="text-danger">missed</strong></p>
             </div>
           </div>
         </div>
@@ -55,12 +58,12 @@
   <div class="container d-flex justify-content-end">
 
     <!-- !!!!! -->
-    <button *ngIf="isInstructor()" class="btn btn-info mx-2" (click)="onNewSession()"><i class="far fa-calendar-plus mr-1"></i> New Session</button>
-    <button *ngIf="isInstructor()" class="btn btn-warning mx-2" data-toggle="modal" data-target="#exportModal"><i class="fas fa-download mr-1"></i>Export</button>
-    <div class="input-group" *ngIf="isStudent()" style="max-width: 400px;">
-      <input type="text" name="" id="" placeholder="Enter session code" class="form-control">
+    <button *ngIf="user && user.isInstructor()" class="btn btn-info mx-2" (click)="onNewSession()"><i class="far fa-calendar-plus mr-1"></i> New Session</button>
+    <button *ngIf="user && user.isInstructor()" class="btn btn-warning mx-2" data-toggle="modal" data-target="#exportModal"><i class="fas fa-download mr-1"></i>Export</button>
+    <div class="input-group" *ngIf="user && !user.isInstructor()" style="max-width: 400px;">
+      <input type="text" name="checkInCode" id="" placeholder="Enter session code" class="form-control" [(ngModel)]="checkInCode">
       <div class="input-group-append">
-        <button class="btn btn-info">Check in</button>
+        <button class="btn btn-info" (click)="checkIn()">Check in</button>
       </div>
     </div>
 

@@ -15,22 +15,22 @@
           <form>
             <div class="form-group">
               <label for="codeInput">Course Code</label>
-              <input type="text" class="form-control" id="codeInput" placeholder="ex. INF 115">
+              <input type="text" class="form-control" name="modal_courseCode" placeholder="ex. INF 115" [(ngModel)]="modal_courseCode" required>
             </div>
             <div class="form-group">
               <label for="nameInput">Course name</label>
-              <input type="text" class="form-control" id="nameInput" placeholder="ex. Intro to project mgmt">
+              <input type="text" class="form-control" name="modal_courseName" placeholder="ex. Intro to project mgmt" [(ngModel)]="modal_courseName" required>
             </div>
             <div class="form-group">
               <label for="idInput">Course Id</label>
-              <input type="text" class="form-control" id="idInput" placeholder="ex. 30142">
+              <input type="number" class="form-control" name="modal_courseId" placeholder="ex. 30142" [(ngModel)]="modal_courseId" required>
             </div>
           </form>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onNewCourse()">Confirm</button>
         </div>
       </div>
     </div>
@@ -50,29 +50,34 @@
           <form>
             <div class="form-group">
               <label for="codeInput">Course Code</label>
-              <input type="text" class="form-control" id="codeInput" placeholder="ex. ABCD1424">
+              <input type="text" class="form-control" name="codeInput" placeholder="ex. ABCD1424" required [(ngModel)]="modal_newCourseCode">
             </div>
           </form>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="onEnrollNewCourseCancel()">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onEnrollNewCourseConfirm()">Confirm</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="container h-100">
-    <h3 class="mt-5 mb-3">Your Courses</h3>
+    <h3 class="mt-5 mb-3">Your Courses <span *ngIf="user"> - {{user.email}}</span></h3>
     <p class="lead">Current Courses</p>
     <div class="row">
+
+      <div class="col-12 col-md-6 col-lg-4 mb-4" *ngIf="!courses || courses.length==0">
+        No courses available
+      </div>
+
       <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let c of courses">
-        <div class="card rounded-0 shadow-light" style="height:220px;" (click)="cardOnClick()">
+        <div class="card rounded-0 shadow-light" style="height:220px;" (click)="cardOnClick(c.cid)">
           <div class="card-header bg-danger rounded-0" style="height: 125px;"></div>
           <div class="card-body">
-            <h5 class="card-title p-0 m-0">{{c.code}}</h5>
-            <p class="card-text p-0 m-0">{{c.name}} ({{c.courseCode}})</p>
+            <h5 class="card-title p-0 m-0">{{c.courseCode}}</h5>
+            <p class="card-text p-0 m-0">{{c.courseName}} ({{c.courseId}})</p>
           </div>
         </div>
       </div>
@@ -83,8 +88,8 @@
 <footer class="footer mt-auto py-3 bg-light text-center position-fixed fixed-bottom">
   <div class="container d-flex justify-content-end">
 
-    <button *ngIf="isInstructor()" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#modalNewCourse"><i class="fas fa-plus mr-1"></i> New Course</button>
-    <button *ngIf="!isInstructor()" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#modalAddCourse"><i class="fas fa-plus mr-1"></i> Add Course</button>
+    <button *ngIf="buttonMode() == 0" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#modalNewCourse"><i class="fas fa-plus mr-1"></i> New Course</button>
+    <button *ngIf="buttonMode() == 1" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#modalAddCourse"><i class="fas fa-plus mr-1"></i> Add Course</button>
     
     <button type="button" (click)="logout()" class="btn btn-danger mx-2"><i class="fas fa-sign-out-alt mr-1"></i>Log out</button>
   </div>

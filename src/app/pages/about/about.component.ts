@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '../../models/user';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-about',
@@ -7,7 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
+  val1:boolean = false;
+  user: User;
+  constructor(private auth: AuthService) {
+  }
 
   tmpImg:string = "https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg";
 
@@ -18,6 +23,15 @@ export class AboutComponent implements OnInit {
     {"name": "Mos, Tyler J.", "email": "tmos@uci.edu", "phone": "+1 562 338 0263", "profile": this.tmpImg},
   ]
   ngOnInit() {
+    this.val1 = false;
+    this.auth.getUser().subscribe(user => {
+      console.log(user);
+      this.user = new User();
+      this.user.uid = user.uid;
+      this.user.email = user.email;
+      this.user.role = user.role;
+      this.val1 = true;
+    });
   }
 
 }
