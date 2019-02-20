@@ -62,7 +62,7 @@ export class SessionService {
     })
   }
 
-  attended(sid: string, uid: string){
+  async attended(sid: string, uid: string){
     var docRef = this.afs.collection('attendance', ref => ref.where('sid', '==', sid).where('uid', '==', uid));
     return docRef.get().toPromise().then(doc => {
       if(doc.empty) return false;

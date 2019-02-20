@@ -1,0 +1,26 @@
+
+<!-- <div id="title" class="d-flex align-items-center mt-1 ml-1 mb-3" style="height:50px;">
+  <button class="btn btn-primary mr-3" (click)="onBack()"><i class="fas fa-chevron-left"></i></button>
+  <h3 class="mb-0" *ngIf="course">{{course.courseCode}} - {{course.courseName}}</h3>
+</div> -->
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th *ngFor="let s of sessions; let i = index">S {{i+1}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of enrolledStudents">
+      <th>{{getEmail(s.uid)}} - {{getAttendenceRate(s.uid)}}</th>
+      <td *ngFor="let ss of sessions">
+        <p class="text-success" *ngIf="attended(ss.sid, s.uid); else elseBlock"><i class="fas fa-check"></i></p>
+        <ng-template #elseBlock>
+          <p class="text-danger">_</p>
+        </ng-template>
+      </td>
+      
+    </tr>
+  </tbody>
+</table>

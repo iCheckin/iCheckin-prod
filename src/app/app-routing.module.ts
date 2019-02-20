@@ -9,6 +9,7 @@ import { CourseComponent } from './pages/course/course.component';
 import { SessionComponent } from './pages/session/session.component';
 
 import { AuthGuard } from '../app/core/auth.guard';
+import { ExportComponent } from './pages/export/export.component';
 
 const routes: Routes = [
   { path:"", component: HomeComponent},
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path:"courses", component: CoursesComponent, canActivate: [AuthGuard]},
   { path:"course/:id", component:CourseComponent, canActivate: [AuthGuard]},
   { path:"session/:id", component:SessionComponent, canActivate: [AuthGuard]},
+  { path:"export/:id", component:ExportComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo:'/'}
 ];
 

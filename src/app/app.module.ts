@@ -17,6 +17,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { CourseComponent } from './pages/course/course.component';
 import { SessionComponent } from './pages/session/session.component';
+import { ExportComponent } from './pages/export/export.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SessionComponent } from './pages/session/session.component';
     CoursesComponent,
     CourseComponent,
     SessionComponent,
+    ExportComponent,
   ],
   imports: [
     BrowserModule,

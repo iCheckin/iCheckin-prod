@@ -37,6 +37,19 @@ export class EnrollService {
     return this.enrollments;
   }
 
+  getEnrolledStudents(cid:string){
+    var docRef = this.afs.collection('enrollment', ref => ref.where('cid', '==', cid));
+    var en = docRef.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data();
+        return data;
+      })
+    }));
+    return en;
+  }
+
+
+
   getEnrollmentCount(cid: string){
     var docRef = this.afs.collection('enrollment', ref => ref.where('cid', '==', cid))
     return docRef.get().toPromise().then(doc => {

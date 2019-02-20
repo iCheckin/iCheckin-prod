@@ -59,7 +59,8 @@
 
     <!-- !!!!! -->
     <button *ngIf="user && user.isInstructor()" class="btn btn-info mx-2" (click)="onNewSession()"><i class="far fa-calendar-plus mr-1"></i> New Session</button>
-    <button *ngIf="user && user.isInstructor()" class="btn btn-warning mx-2" data-toggle="modal" data-target="#exportModal"><i class="fas fa-download mr-1"></i>Export</button>
+    <!-- <button *ngIf="user && user.isInstructor()" class="btn btn-warning mx-2" data-toggle="modal" data-target="#exportModal"><i class="fas fa-download mr-1"></i>Export</button> -->
+    <button *ngIf="user && user.isInstructor()" class="btn btn-warning mx-2" (click)="onExport()"><i class="fas fa-download mr-1"></i>Export</button>
     <div class="input-group" *ngIf="user && !user.isInstructor()" style="max-width: 400px;">
       <input type="text" name="checkInCode" id="" placeholder="Enter session code" class="form-control" [(ngModel)]="checkInCode">
       <div class="input-group-append">

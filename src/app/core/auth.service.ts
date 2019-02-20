@@ -37,6 +37,15 @@ export class AuthService {
       )
   }
 
+  getUsers(){
+    var docRef = this.afs.collection('users');
+    return docRef.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        return a.payload.doc.data();
+      })
+    }));
+  }
+
   isLoggedIn(){
     var user = this.afAuth.auth.currentUser;
     if(user){

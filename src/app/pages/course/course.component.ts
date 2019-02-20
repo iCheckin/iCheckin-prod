@@ -49,7 +49,6 @@ export class CourseComponent implements OnInit {
 
       if(this.user.isInstructor()){
         this.sessionService.getSessionForCourse(courseId).subscribe( session => {
-          // session.sort((a,b) => {return b.startedAt.getTime() - a.startedAt.getTime();});
           this.sessions = session;
           this.sessions = this.sessions.filter( a => !a.isActive );
         })
@@ -59,7 +58,6 @@ export class CourseComponent implements OnInit {
           this.sessions = this.sessions.filter( a => !a.isActive );
         })
       }
-
     });
   }
 
@@ -67,8 +65,8 @@ export class CourseComponent implements OnInit {
     this.router.navigate(['/session',  this.course.cid]);
   }
 
-  onCheckin(){
-
+  onExport(){
+    this.router.navigate(['/export', this.course.cid]);
   }
 
   onBack(){

@@ -28,6 +28,14 @@ export class AttendenceService {
     this.sessionCollection = this.afs.collection('session');
   }
 
+  getAttendence(){
+    return this.attendanceCollection.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        return a.payload.doc.data();
+      })
+    }));
+  }
+
   logAttendence(uid: string, cid: string, sid: string, geohash: string){
     var x = this.sessionCollection.doc(sid).snapshotChanges().subscribe( doc => {
       const d = doc.payload.data();
@@ -42,11 +50,19 @@ export class AttendenceService {
 
         } else {
           var sessionGeo: string = d['location'];
-          console.log(sessionGeo, geohash, this.geohash.neighbors(sessionGeo));
           if(this.geohash.neighbors(sessionGeo).includes(geohash) || sessionGeo === geohash){
             var tmp = {sid: sid, uid: uid, method: "code", createdAt: new Date()};
-            this.attendanceCollection.add(tmp);
-            this.notify.update("successfully checked in", 'success');
+
+            var docRef = this.afs.collection('attendance', ref => ref.where('uid', '==', uid).where('sid','==',sid));
+            docRef.get().toPromise().then(doc => {
+              if(doc.size == 0){
+                this.attendanceCollection.add(tmp);
+                this.notify.update("successfully checked in", 'success');
+              } else {
+                this.notify.update("You already checked in!", "error");
+              }
+            })
+
           } else {
             this.notify.update("You seem a bit far from the class!", "error");
           }
@@ -54,6 +70,5 @@ export class AttendenceService {
       }
       x.unsubscribe();
     });
-
   }
 }
