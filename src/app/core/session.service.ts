@@ -77,7 +77,8 @@ export class SessionService {
       startedAt: s.startedAt,
       isActive: s.isActive,
       location: s.location,
-      endedAt: s.startedAt
+      endedAt: s.startedAt,
+      keyword: s.keyword
     }
     return this.sessionCollection.add(tmp).then(
       doc => {

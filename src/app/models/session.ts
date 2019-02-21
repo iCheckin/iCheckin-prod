@@ -8,4 +8,5 @@ export class Session{
     location: string;
     count?: number;
     attended?: boolean;
+    keyword?: string;
   }

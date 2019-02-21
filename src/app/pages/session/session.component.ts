@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/core/auth.service';
@@ -26,6 +26,7 @@ export class SessionComponent implements OnInit {
   paused:boolean = false;
   showTable:boolean = false;
 
+  sessionKeyword:string;
   timerMinute = "0";
   timerSecond = "30";
 
@@ -70,6 +71,10 @@ export class SessionComponent implements OnInit {
   onStartSession(){
     if(!this.position){
       this.notify.update('Cannot read your location!', 'error');
+      return;
+    }
+    if(this.sessionKeyword == null || this.sessionKeyword === ""){
+      this.notify.update("Cannot read keyword", "error");
       return;
     }
     this.started = true;
@@ -118,6 +123,7 @@ export class SessionComponent implements OnInit {
     this.session.startedAt = new Date();
     this.session.endedAt = new Date();
     this.session.location = this.geohash.encode(this.position['coords']['latitude'], this.position['coords']['latitude']);
+    this.session.keyword = this.sessionKeyword;
 
   }
 

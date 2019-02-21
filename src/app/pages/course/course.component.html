@@ -62,7 +62,7 @@
     <!-- <button *ngIf="user && user.isInstructor()" class="btn btn-warning mx-2" data-toggle="modal" data-target="#exportModal"><i class="fas fa-download mr-1"></i>Export</button> -->
     <button *ngIf="user && user.isInstructor()" class="btn btn-warning mx-2" (click)="onExport()"><i class="fas fa-download mr-1"></i>Export</button>
     <div class="input-group" *ngIf="user && !user.isInstructor()" style="max-width: 400px;">
-      <input type="text" name="checkInCode" id="" placeholder="Enter session code" class="form-control" [(ngModel)]="checkInCode">
+      <input type="text" name="checkInCode" id="" placeholder="Enter keyword" class="form-control" [(ngModel)]="checkInCode">
       <div class="input-group-append">
         <button class="btn btn-info" (click)="checkIn()">Check in</button>
       </div>

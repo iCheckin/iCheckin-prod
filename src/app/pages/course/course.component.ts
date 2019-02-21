@@ -30,10 +30,13 @@ export class CourseComponent implements OnInit {
               private courseService: CourseService, private sessionService: SessionService,
               private enrollService: EnrollService, private route: ActivatedRoute,
               private notify: NotifyService, private attendanceService: AttendenceService,
-              private geohash: GeohashService) { }
+              private geohash: GeohashService) {
+                navigator.geolocation.getCurrentPosition(data => this.position = data);
+              }
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition(data => this.position = data);
+
     this.auth.getUser().subscribe(user => {
       this.user = new User();
       this.user.uid = user.uid;
@@ -75,7 +78,7 @@ export class CourseComponent implements OnInit {
   }
 
   checkIn(){
-    if(this.checkInCode == "") this.notify.update("Please enter a code!", "error");
+    if(this.checkInCode == "") this.notify.update("Please enter a keyword!", "error");
     else{
       this.notify.clear();
       this.attendanceService.logAttendence(this.user.uid, this.course.cid, this.checkInCode,this.geohash.encode(this.position['coords']['latitude'], this.position['coords']['latitude']));

@@ -36,39 +36,51 @@ export class AttendenceService {
     }));
   }
 
-  logAttendence(uid: string, cid: string, sid: string, geohash: string){
-    var x = this.sessionCollection.doc(sid).snapshotChanges().subscribe( doc => {
-      const d = doc.payload.data();
-      if(!d){
-        this.notify.update('Invalid session id!', 'error');
-      }
-      else if(d['cid'] != cid){
-        this.notify.update('Session id does not mach course id!', 'error');
-      } else {
-        if(!d['isActive']){
-          this.notify.update('Session has already expired!', 'error');
-
-        } else {
-          var sessionGeo: string = d['location'];
-          if(this.geohash.neighbors(sessionGeo).includes(geohash) || sessionGeo === geohash){
-            var tmp = {sid: sid, uid: uid, method: "code", createdAt: new Date()};
-
-            var docRef = this.afs.collection('attendance', ref => ref.where('uid', '==', uid).where('sid','==',sid));
-            docRef.get().toPromise().then(doc => {
-              if(doc.size == 0){
-                this.attendanceCollection.add(tmp);
-                this.notify.update("successfully checked in", 'success');
+  logAttendence(uid: string, cid: string, keyword: string, geohash: string){
+    var docRef = this.afs.collection('session', ref => ref.where('cid', '==', cid).where('keyword','==',keyword).where('isActive','==',true));
+    docRef.get().toPromise().then(
+      data => {
+        if(data.docs.length > 0){
+          var sid:string = data.docs[0].id;
+          var x = this.sessionCollection.doc(sid).snapshotChanges().subscribe( doc => {
+            const d = doc.payload.data();
+            if(!d){
+              this.notify.update('Invalid session id!', 'error');
+            }
+            else if(d['cid'] != cid){
+              this.notify.update('Session id does not mach course id!', 'error');
+            } else {
+              if(!d['isActive']){
+                this.notify.update('Session has already expired!', 'error');
+      
               } else {
-                this.notify.update("You already checked in!", "error");
+                var sessionGeo: string = d['location'];
+                if(this.geohash.neighbors(sessionGeo).includes(geohash) || sessionGeo === geohash){
+                  var tmp = {sid: sid, uid: uid, method: "code", createdAt: new Date()};
+      
+                  var docRef = this.afs.collection('attendance', ref => ref.where('uid', '==', uid).where('sid','==',sid));
+                  docRef.get().toPromise().then(doc => {
+                    if(doc.size == 0){
+                      this.attendanceCollection.add(tmp);
+                      this.notify.update("successfully checked in", 'success');
+                    } else {
+                      this.notify.update("You already checked in!", "error");
+                    }
+                  })
+      
+                } else {
+                  this.notify.update("You seem a bit far from the class!", "error");
+                }
               }
-            })
-
-          } else {
-            this.notify.update("You seem a bit far from the class!", "error");
-          }
+            }
+            x.unsubscribe();
+          });
+        } else {
+          this.notify.update("keyword does not exist!", "error");
         }
       }
-      x.unsubscribe();
-    });
+    );
   }
+
+  
 }
