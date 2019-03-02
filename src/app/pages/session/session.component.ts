@@ -122,7 +122,7 @@ export class SessionComponent implements OnInit {
     this.session.createdAt = new Date();
     this.session.startedAt = new Date();
     this.session.endedAt = new Date();
-    this.session.location = this.geohash.encode(this.position['coords']['latitude'], this.position['coords']['latitude']);
+    this.session.location = this.geohash.encode(this.position['coords']['latitude'], this.position['coords']['longitude']);
     this.session.keyword = this.sessionKeyword;
 
   }
